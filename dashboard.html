@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="dashboard.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Services Dashboard</title>
+    <style>
+        /* Card container styling */
+        .company-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
+
+        /* Individual company card styling */
+        .company-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .company-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .company-card h3 {
+            margin: 10px 0;
+        }
+
+        .company-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .company-card .actions {
+            margin-top: 10px;
+        }
+
+        .company-card button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .company-card button:hover {
+            background-color: #45a049;
+        }
+
+        /* Logout button styling */
+        .logout-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<!-- Use module imports for Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+    // Firebase configuration object
+    const firebaseConfig = {
+        apiKey: "AIzaSyCn1vJUh4BBtmf9oA1teCa1VrGbNdvl1NA",
+        authDomain: "smartgeekssolution2.firebaseapp.com",
+        projectId: "smartgeekssolution2",
+        storageBucket: "smartgeekssolution2.appspot.com",
+        messagingSenderId: "930577800406",
+        appId: "1:930577800406:web:01ff9647e3c826391abd77"
+    };
+
+    // Initialize Firebase and Firestore
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Load companies from Firestore and display them as cards
+    async function loadCompanies() {
+        const companiesSnapshot = await getDocs(collection(db, "companies"));
+        const companyList = document.getElementById('company-list');
+        companyList.innerHTML = ''; // Clear current list
+
+        companiesSnapshot.forEach(doc => {
+            const company = doc.data();
+            const companyId = doc.id;
+
+            // Create card for each company
+            const card = document.createElement('div');
+            card.className = 'company-card';
+            card.innerHTML = `
+                    <img src="${company.image}" alt="${company.name}">
+                    <h3>${company.name}</h3>
+                    <p><strong>Address:</strong> ${company.address}</p>
+                    <p><strong>Category:</strong> ${company.category}</p>
+                    <p><strong>Description:</strong> ${company.description}</p>
+                    <p><strong>Contact:</strong> ${company.contact}</p>
+                `;
+            companyList.appendChild(card);
+        });
+    }
+
+    // Filter companies by category
+    function filterCompanies() {
+        const category = document.getElementById('category').value.toLowerCase();
+        const companies = document.querySelectorAll('.company-card');
+
+        companies.forEach(company => {
+            const companyCategory = company.querySelector('p:nth-child(4)').textContent.toLowerCase();
+            company.style.display = (category === 'all' || companyCategory.includes(category)) ? '' : 'none';
+        });
+    }
+
+    // Search companies by name
+    function searchCompanies() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const companies = document.querySelectorAll('.company-card');
+
+        companies.forEach(company => {
+            const companyName = company.querySelector('h3').textContent.toLowerCase();
+            company.style.display = companyName.includes(query) ? '' : 'none';
+        });
+    }
+
+    // Function to handle user logout
+    function logout() {
+        signOut(auth).then(() => {
+            window.location.href = "landingPage.html"; // Redirect after logout
+        }).catch((error) => {
+            console.error("Error signing out:", error);
+        });
+    }
+
+    // Load companies on page load
+    window.onload = loadCompanies;
+    // Function to handle user logout
+    window.logout = function () {
+        signOut(auth).then(() => {
+            window.location.href = "landingPage.html"; // Redirect after logout
+        }).catch((error) => {
+            console.error("Error signing out:", error);
+        });
+    };
+
+</script>
+
+<body>
+
+    <header>
+        <h1>Midpoint Solutions Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="landingPage.html">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div><button class="logout-btn" onclick="logout()">Logout</button></div>
+        </nav>
+    </header>
+
+    <div class="filter">
+        <label for="category">Select Category:</label>
+        <select id="category" onchange="filterCompanies()">
+            <option value="all">All</option>
+            <option value="consulting">Consulting</option>
+            <option value="technology">Technology</option>
+            <option value="finance">Finance</option>
+        </select>
+    </div>
+
+    <div class="search-bar">
+        <label for="search">Search Company:</label>
+        <input type="text" id="search" onkeyup="searchCompanies()" placeholder="Search for a company...">
+    </div>
+
+    <div class="company-list" id="company-list">
+        <!-- Company cards will be dynamically inserted here -->
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Midpoint Solutions Dashboard</p>
+    </footer>
+
+
+</body>
+
+</html>

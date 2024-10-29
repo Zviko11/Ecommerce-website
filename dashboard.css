@@ -1,0 +1,254 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: #0056b3;
+    color: #fff;
+    padding: 10px 0;
+    position: relative;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #004ba0;
+    border-radius: 5px;
+}
+
+/* Dropdown Menu for Nav on the Right */
+.nav-right {
+    position: relative;
+    display: inline-block;
+}
+
+.nav-right .dropbtn {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav-right .dropbtn:hover {
+    background-color: #004ba0;
+    border-radius: 5px;
+}
+
+.nav-right .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.nav-right .dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+.nav-right .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.nav-right:hover .dropdown-content {
+    display: block;
+}
+
+.nav-right .dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+/* Main content styles */
+main {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.filter {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.filter label {
+    font-size: 16px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.filter select {
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.filter select:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+    background-color: #f9f9f9;
+}
+
+/* Search bar styles */
+.search-bar {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar label {
+    font-size: 16px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.search-bar input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+}
+
+/* Company card list */
+.company-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+/* Company card styles */
+.company {
+    background: #fff;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    flex: 1 1 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.company:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.company img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.company h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.company p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #555;
+}
+
+.details {
+    margin-top: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #0056b3;
+    color: #fff;
+    margin-top: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.hamburger {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+}

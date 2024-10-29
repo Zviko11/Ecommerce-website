@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Firebase App, Firestore, and Storage using module import -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCn1vJUh4BBtmf9oA1teCa1VrGbNdvl1NA",
+            authDomain: "smartgeekssolution2.firebaseapp.com",
+            projectId: "smartgeekssolution2",
+            storageBucket: "smartgeekssolution2.appspot.com",
+            messagingSenderId: "930577800406",
+            appId: "1:930577800406:web:01ff9647e3c826391abd77"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const auth = getAuth(app);  // Initialize Firebase Auth
+
+        const companyNameInput = document.getElementById('company-name');
+        const companyAddressInput = document.getElementById('company-address');
+        const companyCategoryInput = document.getElementById('company-category');
+        const companyDescriptionInput = document.getElementById('company-description');
+        const companyContactInput = document.getElementById('company-contact');
+        const companyImageInput = document.getElementById('company-image');
+        const addCompanyBtn = document.getElementById('addCompanyBtn');
+        const companyIdInput = document.getElementById('company-id');
+        const companyList = document.getElementById('company-list');
+
+        // Add or Update company
+        addCompanyBtn.addEventListener("click", async (event) => {
+            event.preventDefault();
+            const name = companyNameInput.value;
+            const address = companyAddressInput.value;
+            const category = companyCategoryInput.value;
+            const description = companyDescriptionInput.value;
+            const contact = companyContactInput.value;
+            const imageFile = companyImageInput.files[0];
+            const companyId = companyIdInput.value;
+
+            if (!name || !address || !category || !contact) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            try {
+                let imageUrl = '';
+
+                if (imageFile) {
+                    const storageRef = ref(storage, `company_images/${imageFile.name}`);
+                    await uploadBytes(storageRef, imageFile);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+
+                if (companyId) {
+                    const companyRef = doc(db, "companies", companyId);
+                    const updatedCompany = { name, address, category, description, contact };
+
+                    // Only update imageUrl if a new image was uploaded
+                    if (imageUrl) updatedCompany.image = imageUrl;
+
+                    await updateDoc(companyRef, updatedCompany);
+                    alert("Company updated successfully!");
+                } else {
+                    await addDoc(collection(db, "companies"), {
+                        name, address, category, description, contact, image: imageUrl
+                    });
+                    alert("Company added successfully!");
+                }
+
+                clearForm();
+                loadCompanies();
+            } catch (error) {
+                console.error("Error adding/updating company: ", error);
+                alert("Failed to add/update company. Please try again.");
+            }
+        });
+
+        // Load companies from Firestore
+        async function loadCompanies() {
+            const companiesSnapshot = await getDocs(collection(db, "companies"));
+            companyList.innerHTML = '';
+
+            companiesSnapshot.forEach(doc => {
+                const company = doc.data();
+                const companyId = doc.id;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${company.name}</td>
+                    <td>${company.address}</td>
+                    <td>${company.category}</td>
+                    <td>${company.description}</td>
+                    <td>${company.contact}</td>
+                    <td><img src="${company.image}" alt="${company.name}" style="width: 100px; height: auto;"></td>
+                    <td>
+                        <button onclick="editCompany('${companyId}', '${company.name}', '${company.address}', '${company.category}', '${company.description}', '${company.contact}', '${company.image}')">Edit</button>
+                        <button onclick="deleteCompany('${companyId}')">Delete</button>
+                    </td>
+                `;
+                companyList.appendChild(row);
+            });
+        }
+
+        window.editCompany = function (id, name, address, category, description, contact, image) {
+            companyNameInput.value = name;
+            companyAddressInput.value = address;
+            companyCategoryInput.value = category;
+            companyDescriptionInput.value = description;
+            companyContactInput.value = contact;
+            companyIdInput.value = id;
+        };
+
+        window.deleteCompany = async function (id) {
+            const confirmDelete = confirm("Are you sure you want to delete this company?");
+            if (confirmDelete) {
+                await deleteDoc(doc(db, "companies", id));
+                alert("Company deleted successfully!");
+                loadCompanies();
+            }
+        };
+
+        function clearForm() {
+            companyNameInput.value = '';
+            companyAddressInput.value = '';
+            companyCategoryInput.value = '';
+            companyDescriptionInput.value = '';
+            companyContactInput.value = '';
+            companyImageInput.value = '';
+            companyIdInput.value = '';
+        }
+
+        function logout() {
+            signOut(auth).then(() => {
+                window.location.href = "landingPage.html";
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+            });
+        }
+
+        window.onload = loadCompanies;
+
+        // Function to handle user logout
+        window.logout = function () {
+            signOut(auth).then(() => {
+                window.location.href = "landingPage.html"; // Redirect after logout
+            }).catch((error) => {
+                console.error("Error signing out:", error);
+            });
+        };
+
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .logout-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .company-form input,
+        .company-form textarea,
+        .company-form button {
+            margin: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="company-form">
+            <h2>Create/Update Company</h2>
+            <input type="text" id="company-name" placeholder="Company Name" />
+            <input type="text" id="company-address" placeholder="Company Address" />
+            <input type="text" id="company-category" placeholder="Company Category" />
+            <textarea id="company-description" placeholder="Company Description"></textarea>
+            <input type="text" id="company-contact" placeholder="Company Contact" />
+            <input type="file" id="company-image" placeholder="Company Image" />
+            <button id="addCompanyBtn">Add/Update Company</button>
+            <input type="hidden" id="company-id" />
+        </div>
+
+        <h2>Company List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Company Address</th>
+                    <th>Company Category</th>
+                    <th>Company Description</th>
+                    <th>Company Contact</th>
+                    <th>Company Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="company-list"></tbody>
+        </table>
+    </div>
+</body>
+
+</html>
