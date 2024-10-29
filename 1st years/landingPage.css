@@ -1,0 +1,127 @@
+/* Body styles */
+.body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  min-height: 100vh;  
+}
+
+header {
+  background-image: url('img.jpg');
+  background-size: cover; 
+  background-position: center; 
+  padding: 20px;
+  text-align: center;
+  height: 300px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+  
+  .cta {
+    background-color:transparent;
+    padding: 50px;
+    text-align: center;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .cta h1 {
+    margin: 0;
+    font-size: 2.5em;
+  }
+  
+  .cta p {
+    margin: 20px 0;
+    font-size: 1.2em;
+  }
+  
+  .cta a {
+    text-decoration: none;
+    color: white;
+    background-color: #0a294b;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .features, .testimonials, .contact {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #0056b3;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+  }
+  
+  .features h2, .testimonials h2, .contact h2 {
+    margin-bottom: 20px;
+  }
+  
+  .feature, .testimonial {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: inline-block;
+    width: 30%;
+  }
+  
+  .contact form {
+    display: inline-block;
+    text-align: left;
+    margin: auto;
+  }
+  
+  .contact label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .contact input, .contact textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .contact button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .contact button:hover {
+    background-color: #0056b3;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #0a294b;
+    color: white;
+  }
+  
+  .social-media a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  
+  .social-media a:hover {
+    text-decoration: underline;
+  }
+  

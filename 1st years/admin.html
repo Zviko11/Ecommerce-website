@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css"> <!-- Link to your CSS file -->
+    <script src="https://fonts.googleapis.com/icon?family=Material+Icons"></script> <!-- Material Icons -->
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="top">
+                <div class="logo">
+                    <h2>Admin<span class="danger"> Dashboard</span></h2>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="admin.html"><span class="material-icons">dashboard</span></a></li>
+                    <li><a href="#"><span class="material-icons">store</span> </a></li>
+                    <li><a href="cart.html"><span class="material-icons">shopping cart</span> </a></li>
+                    <li><a href="#"><span class="material-icons">people</span> </a></li>
+                    <li><a href="#"><span class="material-icons">bar chart</span> </a></li>
+                    <li><a href="#"><span class="material-icons">settings</span> </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <span>Welcome, Admin</span>
+                    <img src="#" alt="User Avatar" class="avatar"> <!-- Placeholder for user avatar -->
+                </div>
+            </header>
+
+            <!-- Company Form for Add/Edit -->
+            <section class="company-form">
+                <h2>Add/Edit Company</h2>
+                <form id="company-form" onsubmit="saveCompany(event)">
+                    <div>
+                        <label for="companyName">Company Name:</label>
+                        <input type="text" id="companyName" required>
+                    </div>
+                    <div>
+                        <label for="companyCategory">Category:</label>
+                        <input type="text" id="companyCategory" required>
+                    </div>
+                    <div>
+                        <label for="companyDescription">Description:</label>
+                        <textarea id="companyDescription" required></textarea>
+                    </div>
+                    <div>
+                        <label for="companyImage">Image URL:</label>
+                        <input type="text" id="companyImage">
+                    </div>
+                    <button type="submit">Save Company</button>
+                </form>
+            </section>
+
+            <!-- Existing Company List -->
+            <section class="company-list">
+                <h2>Companies</h2>
+                <div id="companies">
+                    <!-- Dynamically populated companies will appear here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>
